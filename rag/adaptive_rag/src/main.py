@@ -1,9 +1,7 @@
-from tqdm import tqdm
-
 from data_loaders import LoaderFactory
 from embeddings import EmbeddingFactory
 from retriever import TextSplitter
-from retriever import ChromaVectorStore
+from retriever import RetrieverCore
 
 
 def retrieve(state, retriever):
@@ -53,73 +51,12 @@ def main():
     texts = [doc.page_content for doc in doc_splits]
     metadatas = [doc.metadata for doc in doc_splits]
 
-    chroma_db = ChromaVectorStore(embedding_function=embedding_model)
-
-    chroma_db.add_documents(texts, metadatas)
-
-    retriever = chroma_db.as_retriever()
+    retriever_core = RetrieverCore(embedding_model=embedding_model)
+    retriever_core.add_documents(texts=texts, metadatas=metadatas)
+    retriever = retriever_core.get_retriever()
 
     retriever_output = retrieve(state={"question": "What is RAPTOR?"}, retriever=retriever)
     print(retriever_output)
 
 if __name__ == "__main__":
     main()
-
-    # docs_list = [item for sublist in docs for item in sublist]
-
-    # text_splitter = RecursiveCharacterTextSplitter(
-    #     chunk_size=500,
-    #     chunk_overlap=50,
-    #     length_function=len
-    # )
-    # doc_splits = text_splitter.split_documents(docs_list)
-    #
-    # texts = [doc.page_content for doc in doc_splits]
-    # metadatas = [doc.metadata for doc in doc_splits]
-    #
-    # vectorstore = Chroma(
-    #     collection_name="tuhin-blogs",
-    #     embedding_function=embd,
-    # )
-    #
-    # # Add documents with progress bar
-    # for i in tqdm(range(0, len(texts), 32), desc="Embedding documents"):
-    #     batch_texts = texts[i:i + 32]
-    #     batch_metas = metadatas[i:i + 32]
-    #     vectorstore.add_texts(batch_texts, metadatas=batch_metas)
-    #
-    # print("done")
-    #
-    # retriever = vectorstore.as_retriever()
-    #
-    #
-    # def retrieve(state):
-    #     """
-    #     Retrieve documents
-    #
-    #     Args:
-    #         state (dict): The current graph state
-    #
-    #     Returns:
-    #         state (dict): New key added to state, documents, that contains retrieved documents
-    #     """
-    #     print("---RETRIEVE---")
-    #     question = state["question"]
-    #     print(f"question {question}")
-    #
-    #     # Retrieval
-    #     documents = retriever.invoke(question)
-    #     print(f"documents {documents}")
-    #
-    #     return {"documents": documents, "question": question}
-    #
-    #
-    # state = {"question": "What is RAPTOR?"}
-    # a = retrieve(state)
-    # print(a)
-    #
-    # # vectorstore = Chroma.from_documents(
-    # #     documents=doc_splits,
-    # #     collection_name="tuhin-blogs",
-    # #     embedding=embd,
-    # # )
