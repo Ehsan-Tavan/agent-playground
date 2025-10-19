@@ -13,5 +13,6 @@ llm:
   temperature: 0.0
 
 embedding_model:
+  name: "huggingface"
   model_path: "/home/ehsantavan/Projects/multilingual-e5-small"
   device: "cpu"
