@@ -41,7 +41,7 @@ def get_retrieval_grader_node(
         llm_model: str,
         api_key: str,
         base_url: str,
-        temperature: int
+        temperature: float
 ) -> RetrievalGraderNode:
     llm = ChatOpenAI(model=llm_model,
                      api_key=api_key,
