@@ -1,9 +1,9 @@
 knowledge_bae:
   data_path:
-    - "../data/raptor.html"
-    - "../data/biomedical_rag.html"
-    - "../data/multihead_attention.html"
-    - "../data/transformer_embeddings.html"
+    - "./data/raptor.html"
+    - "./data/biomedical_rag.html"
+    - "./data/multihead_attention.html"
+    - "./data/transformer_embeddings.html"
 
 llm:
   model: "gpt-4o-mini"
